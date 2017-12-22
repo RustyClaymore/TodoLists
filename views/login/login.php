@@ -6,7 +6,12 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') 
     $user = User::findRegisteredUser($_POST['login'], $_POST['password']);
 
     if ($user) {
-        print_r('user found!');
+        session_start([
+            'cookie_lifetime' => 86400,
+        ]);
+        $_SESSION['userId'] = $user->getId();
+
+        header('Location: ../todolist/todolist.php');
     } else {
         print_r('user not found!');
     }

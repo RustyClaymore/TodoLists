@@ -4,7 +4,6 @@ class UserRegistrationController
 {
     public function registerUser(User $model): bool
     {
-        return $model->registerUser();
+        return $model->register();
     }
-
 }

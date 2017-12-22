@@ -21,6 +21,11 @@ class User
         $this->password  = $password;
     }
 
+    public function setID($id)
+    {
+        $this->id = $id;
+    }
+
     public static function all()
     {
         $list = [];
@@ -30,13 +35,15 @@ class User
             $req = $db->query('SELECT * FROM users');
 
             foreach ($req->fetchAll() as $user) {
-                $list[] = new User(
-                    $user['id'],
+                $usr = new User(
                     $user['firstname'],
                     $user['lastname'],
                     $user['login'],
                     $user['password']
                 );
+                $usr->setID($user['id']);
+
+                $list[] = $usr;
             }
         } catch (Exception $e) {
             Throw new ErrorException('no table users found in the database.\n', $e->getMessage());
@@ -45,7 +52,7 @@ class User
         return $list;
     }
 
-    public static function find($id)
+    public static function findByID($id)
     {
         $db = Db::getInstance();
 
@@ -55,13 +62,15 @@ class User
         $req->execute(['id' => $id]);
         $user = $req->fetch();
 
-        return new User(
-            $user['id'],
+        $usr = new User(
             $user['firstname'],
             $user['lastname'],
             $user['login'],
             $user['password']
         );
+        $usr->setID($user['id']);
+
+        return $usr;
     }
 
     public static function findRegisteredUser($login, $password)
@@ -73,19 +82,21 @@ class User
         $user = $req->fetch();
 
         if ($user) {
-            return new User(
-                $user['id'],
+            $usr = new User(
                 $user['firstname'],
                 $user['lastname'],
                 $user['login'],
                 $user['password']
             );
-        } else {
-            return null;
+            $usr->setID($user['id']);
+
+            return $usr;
         }
+
+        return null;
     }
 
-    public function registerUser(): bool
+    public function register(): bool
     {
         $db = Db::getInstance();
         if (isset($db)) {
@@ -102,5 +113,10 @@ class User
         }
 
         return false;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 }

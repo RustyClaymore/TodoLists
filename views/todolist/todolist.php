@@ -32,6 +32,7 @@ if (isset($_GET['delete_task'])) {
 
 <div class="header">
     <header>
+        <h1>Awesome Todo List</h1>
         <a href='../../index.php'>Home</a><br>
         <a href='../logout/logout.php'>Logout</a><br>
     </header>
